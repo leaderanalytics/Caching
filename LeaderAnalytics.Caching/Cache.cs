@@ -12,6 +12,7 @@ namespace LeaderAnalytics.Caching
 
     public class Cache<TValue> : ICache<TValue>, IDisposable
     {
+        public int Count { get => cache.Count; }
         public bool IsSeeded { get => cache.Any(); }
         public bool IsEnabled { get; set; }
         public EvictionStrategy EvictionStrategy { get; private set; }

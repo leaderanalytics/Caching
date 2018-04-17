@@ -4,6 +4,7 @@ using NUnit.Framework;
 using LeaderAnalytics.Caching;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace LeaderAnalytics.Caching.Tests
 {
@@ -97,6 +98,70 @@ namespace LeaderAnalytics.Caching.Tests
         {
             InvalidOperationException ex = Assert.Throws<InvalidOperationException>(() => customerCache.Get(x => x.CompanyName == "ABC"));
             Assert.AreEqual(ex.Message, "An index matching (x.CompanyName == \"ABC\") was not found.");
+        }
+
+        [Test]
+        public void Adding_partial_duplicate_throws()
+        {
+            // database ID is unique but other properties are dupes
+            Customer cust1 = new Customer { DatabaseID = 9000, FederalEIN = "10", SalesForceID = "100", CompanyName = "ABC" };
+            Exception ex = Assert.Throws<Exception>(() => customerCache.Set(cust1));
+            Assert.AreEqual(ex.Message, "Duplicate key error. 4 indexes are defined however only 1 keys were created.");
+        }
+
+        [Test]
+        public void Adding_full_duplicate_replaces_previous_object()
+        {
+            Customer oldCust1 = customerCache.Get(x => x.DatabaseID.ToString() == "1");
+            Assert.AreEqual("ABC", oldCust1.CompanyName);
+
+            Customer newCust1 = new Customer { DatabaseID = 1, FederalEIN = "10", SalesForceID = "100", CompanyName = "XYZ" };
+            customerCache.Set(newCust1);
+
+            Customer result = customerCache.Get(x => x.DatabaseID.ToString() == "1");
+            Assert.AreEqual("XYZ", result.CompanyName);
+        }
+
+        [Test]
+        public async Task Add_and_remove_on_different_threads_maintains_consistency()
+        {
+            customerCache.Purge();
+
+            Task t0 = Task.Run(() => {
+                for (int i = 0; i < 1000; i++)
+                {
+                    Customer cust1 = new Customer { DatabaseID = 1, FederalEIN = "10", SalesForceID = "100", CompanyName = "ABC" };
+                    Customer cust2 = new Customer { DatabaseID = 2, FederalEIN = "20", SalesForceID = "200", CompanyName = "ABC" };
+                    customerCache.Set(cust1);
+                    customerCache.Set(cust2);
+                    customerCache.Get(x => x.DatabaseID.ToString() == "1");
+                    customerCache.Get(x => x.DatabaseID.ToString() == "2");
+                    customerCache.Remove("1");
+                    customerCache.Remove("2");
+                }
+
+            });
+
+
+            Task t1 = Task.Run(() =>
+            {
+                for (int i = 0; i < 1000; i++)
+                {
+                    Customer cust1 = new Customer { DatabaseID = 1, FederalEIN = "10", SalesForceID = "100", CompanyName = "ABC" };
+                    Customer cust2 = new Customer { DatabaseID = 2, FederalEIN = "20", SalesForceID = "200", CompanyName = "ABC" };
+                    customerCache.Set(cust1);
+                    customerCache.Set(cust2);
+                    customerCache.Get(x => x.DatabaseID.ToString() == "1");
+                    customerCache.Get(x => x.DatabaseID.ToString() == "2");
+                    customerCache.Remove("1");
+                    customerCache.Remove("2");
+                }
+
+            });
+
+            await Task.WhenAll(t1,t0);
+            Assert.AreEqual(0, customerCache.KeyCount + customerCache.ObjectCount);
+
         }
     }
 }

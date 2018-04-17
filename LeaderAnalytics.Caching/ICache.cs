@@ -9,6 +9,19 @@ namespace LeaderAnalytics.Caching
     public interface ICache<TValue>
     {
         /// <summary>
+        /// Returns number of items that currently exist in the cache.
+        /// </summary>
+        int Count { get; }
+        /// <summary>
+        /// Returns true if one or more items exists in the Cache
+        /// </summary>
+        /// <returns></returns>
+        bool IsSeeded { get; }
+        /// <summary>
+        /// Enables/Disables Get, Set, and Remove.  CacheManager.EnableCaching must ALSO be true for caching to be enabled.
+        /// </summary>
+        bool IsEnabled { get; set; }
+        /// <summary>
         /// Finds an item in the cache based on passed key
         /// </summary>
         /// <param name="key"></param>
@@ -38,15 +51,7 @@ namespace LeaderAnalytics.Caching
         /// Removes items that are eligible for eviction based  
         /// </summary>
         void Evict();
-        /// <summary>
-        /// Returns true if one or more items exists in the Cache
-        /// </summary>
-        /// <returns></returns>
-        bool IsSeeded { get; }
-        /// <summary>
-        /// Enables/Disables Get, Set, and Remove.  CacheManager.EnableCaching must ALSO be true for caching to be enabled.
-        /// </summary>
-        bool IsEnabled { get; set; }
+        
 
         /// <summary>
         /// Maximum amount of time item can live in the cache

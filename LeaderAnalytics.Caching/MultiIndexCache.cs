@@ -8,12 +8,14 @@ namespace LeaderAnalytics.Caching
 {
     public class MultiIndexCache<T>
     {
+        private object locker = new object();
         private readonly ICache<string> keys;
         private readonly ICache<T> values;
         private readonly string[] indexSignatures;
         private readonly int indexCount;
         private readonly Func<T, string>[] indexes;
-
+        public int ObjectCount { get => values.Count; }
+        public int KeyCount { get => keys.Count; }
 
         public MultiIndexCache(params Expression<Func<T, string>>[] indexes)
         {
@@ -70,13 +72,30 @@ namespace LeaderAnalytics.Caching
         /// <param name="obj"></param>
         public void Set(T obj)
         {
-            string link = GuidEncoder.EncodedGuid();
-            int counter = 0;
+            lock (locker)
+            {
+                Remove(obj);
+                string link = GuidEncoder.EncodedGuid();
+                int counter = 0;
+                int startKeyCount = keys.Count;
+                int startValueCount = values.Count;
 
-            foreach (Func<T, string> func in indexes)
-                keys.Set(counter++ + func(obj), link);
+                foreach (Func<T, string> func in indexes)
+                    keys.Set(counter++ + func(obj), link);
 
-            values.Set(link, obj);
+                int endKeyCount = keys.Count;
+
+                // if all keys are unique we should have added exactly [indexCount] items to the keys cache.
+                if (startKeyCount + indexCount != endKeyCount && startKeyCount != endKeyCount)
+                    throw new Exception($"Duplicate key error. {indexCount} indexes are defined however only { endKeyCount - startKeyCount} keys were created.");
+
+                values.Set(link, obj);
+
+                int endValueCount = values.Count;
+
+                if (endValueCount != startValueCount + 1)
+                    throw new Exception($"Incorrect number of values added. 1 object should be added however {startValueCount - endValueCount} objects were added.");
+            }
         }
 
         /// <summary>
@@ -95,62 +114,45 @@ namespace LeaderAnalytics.Caching
         /// <param name="key">A value that can be found using the first index.</param>
         public void Remove(string key)
         {
-            key = "0" + key;
-            string link = keys.Get(key);
+            lock(locker)
+            {
+                key = "0" + key;
+                string link = keys.Get(key);
 
-            if (link == null)
-                return;
+                if (link == null)
+                    return;
 
-            T obj = values.Get(link);
+                int startKeyCount = keys.Count;
 
-            if (obj == null)
-                throw new Exception($"Internal consistency error while removing an object.  A key for an object with id {key} was found in the keys cache but no matching object with key {link} was found in the values cache.");
+                T obj = values.Get(link);
 
-            for (int i = 0; i < indexCount; i++)
-                keys.Remove(i.ToString() + indexes[i](obj));
+                if (obj == null)
+                    throw new Exception($"Internal consistency error while removing an object.  A key for an object with id {key} was found in the keys cache but no matching object with key {link} was found in the values cache.");
 
-            values.Remove(link);
+                for (int i = 0; i < indexCount; i++)
+                    keys.Remove(i.ToString() + indexes[i](obj));
+
+                int endKeyCount = keys.Count;
+                int startValueCount = values.Count;
+                values.Remove(link);
+                int endValueCount = values.Count;
+
+                if (endKeyCount + indexCount != startKeyCount)
+                    throw new Exception($"Incorrect number of keys removed. {indexCount} indexes are defined however only {startKeyCount - endKeyCount} keys were removed.");
+
+                if(endValueCount != startValueCount -1)
+                    throw new Exception($"Incorrect number of values removed. 1 object should be removed however {startValueCount - endValueCount} objects were removed.");
+            }
         }
 
-
-        // Updating keys does not work.  All cache keys must be immutable.
-        //private bool UpdateKeys(T newObj)
-        //{
-        //    bool exists = false;
-
-        //    // try to find an existing instance of the object using the first index.
-        //    string key = "0" + indexes[0](newObj);
-        //    string link = keys.Get(key);
-        //    exists = ! string.IsNullOrEmpty(link);
-
-        //    if (!exists)
-        //        return exists;
-
-        //    T oldObj = values.Get(link);
-
-        //    if (oldObj == null)
-        //        throw new Exception($"Internal consistency error while updating an object.  A key for an object with id {key} was found in the keys cache but no matching object with key {link} was found in the values cache.");
-           
-
-        //    // Update indexes.  First index is immutable so we start with index 1.
-        //    for (int i = 1; i < indexCount; i++)
-        //    {
-
-        //        string oldKey = indexes[i](oldObj);
-        //        string newKey = indexes[i](newObj);
-
-        //        if (oldKey != newKey)
-        //        {
-        //            string istring = i.ToString();
-        //            keys.Remove(istring + oldKey);
-        //            keys.Set(istring + newKey, link);
-        //        }
-        //    }
-            
-        //    // update the object 
-        //    values.Set(link, newObj);
-        //    return exists;
-        //}
+        public void Purge()
+        {
+            lock (locker)
+            {
+                keys.Purge();
+                values.Purge();
+            }
+        }
 
         private KeyValuePair<int, string> ParseExpression(LambdaExpression expr)
         {
