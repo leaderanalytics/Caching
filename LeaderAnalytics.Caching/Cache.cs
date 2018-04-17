@@ -8,70 +8,7 @@ using System.Threading;
 
 namespace LeaderAnalytics.Caching
 {
-    public enum EvictionStrategy
-    {
-        None,
-        TimeSinceAdd,
-        TimeSinceGet,
-        MaxCount
-    }
-
-    public class TimeSinceAddEvictionStrategyArgs : IEvictionStrategyArgs
-    {
-        public EvictionStrategy EvictionStrategy { get; private set; }
-        public int TTL_minutes { get; private set; }
-        public int Eviction_minutes { get; private set; }
-
-        public TimeSinceAddEvictionStrategyArgs(int ttl_minutes = 120, int eviction_minutes = 120)
-        {
-            EvictionStrategy = EvictionStrategy.TimeSinceAdd;
-            TTL_minutes = ttl_minutes;
-            Eviction_minutes = eviction_minutes;
-        }
-    }
-
-    public class TimeSinceGetEvictionStrategyArgs : IEvictionStrategyArgs
-    {
-        public EvictionStrategy EvictionStrategy { get; private set; }
-        public int TTL_minutes { get; private set; }
-        public int Eviction_minutes { get; private set; }
-
-        public TimeSinceGetEvictionStrategyArgs(int ttl_minutes = 120, int eviction_minutes = 120)
-        {
-            EvictionStrategy = EvictionStrategy.TimeSinceGet;
-            TTL_minutes = ttl_minutes;
-            Eviction_minutes = eviction_minutes;
-        }
-    }
-
-    public class MaxCountEvictionStrategyArgs : IEvictionStrategyArgs
-    {
-        public EvictionStrategy EvictionStrategy { get; private set; }
-        public int MaxCount { get; private set; }
-
-        public MaxCountEvictionStrategyArgs(int maxCount = int.MaxValue)
-        {
-            EvictionStrategy = EvictionStrategy.MaxCount;
-            MaxCount = maxCount;
-        }
-    }
-
-    public class NoEvictionStrategyArgs : IEvictionStrategyArgs
-    {
-        public EvictionStrategy EvictionStrategy { get; private set; } = EvictionStrategy.None;
-    }
-
-    internal class CacheItem<TValue>
-    {
-        public TValue Value { get; set; }
-        public DateTime TimeStamp { get; set; }
-
-        public CacheItem(TValue val)
-        {
-            Value = val;
-            TimeStamp = DateTime.Now;
-        }
-    }
+    
 
     public class Cache<TValue> : ICache<TValue>, IDisposable
     {
@@ -182,7 +119,6 @@ namespace LeaderAnalytics.Caching
             List<string> keys = cache.Where(x => cutoff > x.Value.TimeStamp).Select(x => x.Key).ToList();
             keys.ForEach(x => cache.TryRemove(x, out CacheItem<TValue> obj));
         }
-
 
         private bool disposed;
 

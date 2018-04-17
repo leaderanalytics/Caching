@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 
 namespace LeaderAnalytics.Caching
 {
-    public interface IEvictionStrategyArgs
-    {
-        EvictionStrategy EvictionStrategy { get; }
-    }
-
     public interface ICache<TValue>
     {
         /// <summary>

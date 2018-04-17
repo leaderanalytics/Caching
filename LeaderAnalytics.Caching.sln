@@ -3,9 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeaderAnalytics.Caching", "LeaderAnalytics.Caching\LeaderAnalytics.Caching.csproj", "{40E80186-7BC7-41A8-95ED-6B1E30BD3D0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeaderAnalytics.Caching", "LeaderAnalytics.Caching\LeaderAnalytics.Caching.csproj", "{40E80186-7BC7-41A8-95ED-6B1E30BD3D0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeaderAnalytics.Caching.Tests", "LeaderAnalytics.Caching.Tests\LeaderAnalytics.Caching.Tests.csproj", "{2A3D54A9-D011-41B2-9E48-EA4E46A23B92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeaderAnalytics.Caching.Tests", "LeaderAnalytics.Caching.Tests\LeaderAnalytics.Caching.Tests.csproj", "{2A3D54A9-D011-41B2-9E48-EA4E46A23B92}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CD051C7A-2F9E-4236-A6AA-323FB6645D3A}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
