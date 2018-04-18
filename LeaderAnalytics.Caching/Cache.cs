@@ -17,7 +17,6 @@ namespace LeaderAnalytics.Caching
         public bool IsEnabled { get; set; }
         public EvictionStrategy EvictionStrategy { get; private set; }
         public TimeSpan TimeToLive { get; private set; }
-        public int MaxCount { get; private set; }
         private Timer EvictionTimer;
         private ConcurrentDictionary<string, CacheItem<TValue>> cache;
 
@@ -41,8 +40,6 @@ namespace LeaderAnalytics.Caching
                 TimeSinceGetEvictionStrategyArgs targs = args as TimeSinceGetEvictionStrategyArgs;
                 SetupEvictionTimer(targs.TTL_minutes, targs.Eviction_minutes);
             }
-            else if (args is MaxCountEvictionStrategyArgs)
-                MaxCount = (args as MaxCountEvictionStrategyArgs).MaxCount;
 
             IsEnabled = true;
         }
@@ -82,9 +79,6 @@ namespace LeaderAnalytics.Caching
                 return;
 
             cache[key] = new CacheItem<TValue>(item);
-
-            if (EvictionStrategy == EvictionStrategy.MaxCount && cache.Count > MaxCount)
-                Remove(cache.ElementAt(0).Key);
         }
 
         public void Remove(string key)

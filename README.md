@@ -60,7 +60,6 @@ Supports the following eviction strategies:
 
 * Time since add - evicts based on time elapsed since object was added to cache.
 * Time since get - evicts based on time elapsed since object was last accessed.
-* Max count - evicts based on ordinal index when cache count reaches specified max.
 
 Supports global enabling/disabling via CacheManager master switch:
 

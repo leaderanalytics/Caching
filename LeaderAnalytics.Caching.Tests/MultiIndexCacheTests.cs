@@ -8,14 +8,6 @@ using System.Threading.Tasks;
 
 namespace LeaderAnalytics.Caching.Tests
 {
-    public class Customer
-    {
-        public int DatabaseID { get; set; }
-        public string FederalEIN { get; set; }
-        public string SalesForceID { get; set; }
-        public string CompanyName { get; set; }
-    }
-
 
     [TestFixture]
     public class MultiIndexCacheTests
