@@ -129,7 +129,7 @@ namespace LeaderAnalytics.Caching
             {
                 if (disposing)
                 {
-                    EvictionTimer.Dispose();
+                    EvictionTimer?.Dispose();
                     disposed = true;
                 }
             }
