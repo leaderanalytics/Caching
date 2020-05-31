@@ -1,26 +1,38 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.0.29</Version>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Version>0.0.30</Version>
     <Authors>Leader Analytics</Authors>
     <Company>Leader Analytics</Company>
     <Product />
     <Description>Cache and MultiIndexCache</Description>
-    <FileVersion>0.0.29.0</FileVersion>
+    <FileVersion>0.0.30.0</FileVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/leaderanalytics/Caching</PackageProjectUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryUrl>https://github.com/leaderanalytics/Caching</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Copyright>2018 Leader Analytics</Copyright>
+    <Copyright>2020 Leader Analytics</Copyright>
     <PackageReleaseNotes>See Repository</PackageReleaseNotes>
     <PackageTags>cache multi key keys multi index indexes</PackageTags>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Update="NETStandard.Library" Version="2.0.1" />
-  </ItemGroup>
+  <PropertyGroup>
 
+    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
+    <EmbedUntrackedSources>false</EmbedUntrackedSources>
+
+    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+    <IncludeSymbols>true</IncludeSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Add PackageReference specific for your source control provider (see below) -->
+    <!-- https://github.com/dotnet/sourcelink/blob/master/README.md -->
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
 
 </Project>
