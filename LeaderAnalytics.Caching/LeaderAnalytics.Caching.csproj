@@ -26,38 +26,9 @@
     <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
 
-    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <DebugType>embedded</DebugType>
-    <GitRepositoryRemoteName>github</GitRepositoryRemoteName>
-  </PropertyGroup>
-  
-  
-  
-  
-  
-  
-  
-  
-  <!--START Workaround https://github.com/dotnet/sourcelink/issues/572 should be able to remove this after new sdk 3.1.3xx released -->
-  <PropertyGroup>
-    <TargetFrameworkMonikerAssemblyAttributesPath>$([System.IO.Path]::Combine('$(IntermediateOutputPath)','$(TargetFrameworkMoniker).AssemblyAttributes$(DefaultLanguageSourceExtension)'))</TargetFrameworkMonikerAssemblyAttributesPath>
-  </PropertyGroup>
-  <ItemGroup>
-    <EmbeddedFiles Include="$(GeneratedAssemblyInfoFile)" />
-  </ItemGroup>
-  <!--END Workaround https://github.com/dotnet/sourcelink/issues/572-->
-  
-  
-  
-  
-  
-  
-  
-  
-  
+  </PropertyGroup>  
   
   <ItemGroup>
     <!-- Add PackageReference specific for your source control provider (see below) -->
