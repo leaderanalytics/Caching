@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -30,7 +30,35 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <DebugType>embedded</DebugType>
+    <GitRepositoryRemoteName>github</GitRepositoryRemoteName>
   </PropertyGroup>
+  
+  
+  
+  
+  
+  
+  
+  
+  <!--START Workaround https://github.com/dotnet/sourcelink/issues/572 should be able to remove this after new sdk 3.1.3xx released -->
+  <PropertyGroup>
+    <TargetFrameworkMonikerAssemblyAttributesPath>$([System.IO.Path]::Combine('$(IntermediateOutputPath)','$(TargetFrameworkMoniker).AssemblyAttributes$(DefaultLanguageSourceExtension)'))</TargetFrameworkMonikerAssemblyAttributesPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedFiles Include="$(GeneratedAssemblyInfoFile)" />
+  </ItemGroup>
+  <!--END Workaround https://github.com/dotnet/sourcelink/issues/572-->
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <ItemGroup>
     <!-- Add PackageReference specific for your source control provider (see below) -->
     <!-- https://github.com/dotnet/sourcelink/blob/master/README.md -->
