@@ -1,6 +1,8 @@
 # LeaderAnalytics.Caching
 
-4/17/2018
+2/1/2021 - Migrate to .net 5
+
+4/17/2018 - Beta release
 
 ## MultiIndexCache
 
