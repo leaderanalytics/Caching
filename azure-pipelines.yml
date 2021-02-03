@@ -50,5 +50,5 @@ steps:
   inputs:
     command: 'push'
     feedsToUse: 'select'
-    vstsFeed: 'Leaderanalytics.Caching/CoreArtifacts'
-    publishVstsFeed: 'Leaderanalytics.Caching/CoreArtifacts'
+    vstsFeed: 'Leaderanalytics.Caching/CoreArtifacts@Local'
+    publishVstsFeed: 'Leaderanalytics.Caching/CoreArtifacts@Local'
