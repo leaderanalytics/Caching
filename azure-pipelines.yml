@@ -50,4 +50,4 @@ steps:
   inputs:
     command: 'push'
     nuGetFeedType: 'internal'
-    publishVstsFeed: 'Nugets'
+    publishVstsFeed: 'LeaderAnalyticsFeed'
