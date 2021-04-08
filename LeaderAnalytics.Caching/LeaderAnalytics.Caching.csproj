@@ -2,45 +2,37 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <Version>1.0.0</Version>
     <Authors>Leader Analytics</Authors>
     <Company>Leader Analytics</Company>
-    <Product />
+    <Product>LeaderAnalytics.Caching</Product>
     <Description>Cache and MultiIndexCache</Description>
-    <FileVersion>1.0.0.0</FileVersion>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>2020 Leader Analytics</Copyright>
     <PackageProjectUrl>https://github.com/leaderanalytics/Caching</PackageProjectUrl>
-    <PackageLicenseUrl></PackageLicenseUrl>
+    <PackageIcon>logo-xsmall.png</PackageIcon>
     <RepositoryUrl>https://github.com/leaderanalytics/Caching</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Copyright>2020 Leader Analytics</Copyright>
-    <PackageReleaseNotes>See Repository</PackageReleaseNotes>
     <PackageTags>cache multi key keys multi index indexes</PackageTags>
+    <PackageReleaseNotes>See Repository</PackageReleaseNotes>
+    <Version>1.0.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <PackageId>LeaderAnalytics.Caching</PackageId>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup>
-
-    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-
-    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-
-    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <RootNamespace>LeaderAnalytics.Caching</RootNamespace>
+    <AssemblyName>LeaderAnalytics.Caching</AssemblyName>
   </PropertyGroup>
+
   <ItemGroup>
-    <!-- Add PackageReference specific for your source control provider (see below) -->
-    <!-- https://github.com/dotnet/sourcelink/blob/master/README.md -->
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
+    <None Include="..\LICENSE" Pack="true" PackagePath="\" />
+    <None Include="..\logo-xsmall.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
