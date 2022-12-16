@@ -1,5 +1,7 @@
 # LeaderAnalytics.Caching
 
+12/15/2022 - Migrate to .net 7
+
 11/27/2021 - Migrate to .net 6
 
 2/1/2021 - Migrate to .net 5
