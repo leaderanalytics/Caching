@@ -42,6 +42,14 @@ namespace LeaderAnalytics.Caching.Tests
             }
         }
 
+        [Test]
+        public void GetItemsTest()
+        {
+            List<KeyValuePair<string,Customer>> cacheItems = customerCache.GetItems();
+            Assert.IsNotNull(cacheItems);
+            Assert.AreEqual(3, cacheItems.Count);
+        }
+
         public void TimeSinceAdd_eviction_strategy_evicts()
         {
             ICache<Customer> cache = new Cache<Customer>(new TimeSinceAddEvictionStrategyArgs(1, 1));
@@ -70,5 +78,7 @@ namespace LeaderAnalytics.Caching.Tests
             Customer c2 = cache.Get(cust2.DatabaseID.ToString());
             Assert.IsNull(c2);
         }
+
+        
     }
 }

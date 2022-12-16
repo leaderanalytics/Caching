@@ -51,11 +51,14 @@ namespace LeaderAnalytics.Caching
         /// Removes items that are eligible for eviction based  
         /// </summary>
         void Evict();
-        
-
         /// <summary>
         /// Maximum amount of time item can live in the cache
         /// </summary>
         TimeSpan TimeToLive { get;  }
+        /// <summary>
+        /// Returns a list of items in the cache
+        /// </summary>
+        /// <returns></returns>
+        List<KeyValuePair<string, TValue>> GetItems();
     }
 }

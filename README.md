@@ -1,6 +1,6 @@
 # LeaderAnalytics.Caching
 
-12/15/2022 - Migrate to .net 7
+12/15/2022 - Migrate to .net 7, Add GetItems()
 
 11/27/2021 - Migrate to .net 6
 

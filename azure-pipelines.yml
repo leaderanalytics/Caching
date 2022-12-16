@@ -11,7 +11,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  major: 3
+  major: 4
   minor: 0
   patch: $[counter(variables['minor'], 0)] #this will reset when we bump minor
   NugetVersion: $(major).$(minor).$(patch)

@@ -115,6 +115,8 @@ namespace LeaderAnalytics.Caching
             keys.ForEach(x => cache.TryRemove(x, out CacheItem<TValue> obj));
         }
 
+        public List<KeyValuePair<string, TValue>> GetItems() => cache.Select(x => new KeyValuePair<string, TValue>(x.Key, x.Value.Value)).ToList();
+
         private bool disposed;
 
         public void Dispose()
