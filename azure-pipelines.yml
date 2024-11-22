@@ -7,7 +7,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  project: 'LeaderAnalytics.Caching/LeaderAnalytics.Caching/LeaderAnalytics.Caching.csproj'
+  project: 'LeaderAnalytics.Caching/LeaderAnalytics.Caching.csproj'
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
