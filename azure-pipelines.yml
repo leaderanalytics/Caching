@@ -33,6 +33,11 @@ steps:
 - script: nbgv cloud
   displayName: Set Version
 
+- task: UseDotNet@2
+  displayName: 'Use dotnet 9'
+  inputs:
+    version: '9.x'
+
 - task: NuGetToolInstaller@1
 
 - task: DotNetCoreCLI@2
