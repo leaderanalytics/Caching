@@ -46,8 +46,8 @@ namespace LeaderAnalytics.Caching.Tests
         public void GetItemsTest()
         {
             List<KeyValuePair<string,Customer>> cacheItems = customerCache.GetItems();
-            Assert.IsNotNull(cacheItems);
-            Assert.AreEqual(3, cacheItems.Count);
+            Assert.That(cacheItems, Is.Not.Null);
+            Assert.That(cacheItems.Count, Is.EqualTo(3));
         }
 
         public void TimeSinceAdd_eviction_strategy_evicts()
@@ -55,9 +55,9 @@ namespace LeaderAnalytics.Caching.Tests
             ICache<Customer> cache = new Cache<Customer>(new TimeSinceAddEvictionStrategyArgs(1, 1));
             Customer cust1 = new Customer { DatabaseID = 1, FederalEIN = "10", SalesForceID = "100", CompanyName = "ABC" };
             cache.Set(cust1.DatabaseID.ToString(), cust1);
-            Assert.AreEqual(1, cache.Count);
+            Assert.That(cache.Count, Is.EqualTo(1));
             System.Threading.Thread.Sleep(61000);
-            Assert.AreEqual(0, cache.Count);
+            Assert.That(cache.Count, Is.EqualTo(0));
         }
 
         public void TimeSinceGet_eviction_strategy_evicts()
@@ -67,16 +67,16 @@ namespace LeaderAnalytics.Caching.Tests
             Customer cust2 = new Customer { DatabaseID = 2, FederalEIN = "20", SalesForceID = "200", CompanyName = "ABC" };
             cache.Set(cust1.DatabaseID.ToString(), cust1);
             cache.Set(cust2.DatabaseID.ToString(), cust2);
-            Assert.AreEqual(2, cache.Count);
+            Assert.That(cache.Count, Is.EqualTo(2));
             System.Threading.Thread.Sleep(31000);                           // sleep for thirty seconds
             Customer c1 = cache.Get(cust1.DatabaseID.ToString());           // get cust1 to reset its timestamp
-            Assert.IsNotNull(c1);
+            Assert.That(c1, Is.Not.Null);
             System.Threading.Thread.Sleep(35000);                           // sleep for another thirty seconds
-            Assert.AreEqual(1, cache.Count);                                // verify that cust1 remains in the cache ache cust2 was evicted 
+            Assert.That(cache.Count, Is.EqualTo(1));                                // verify that cust1 remains in the cache ache cust2 was evicted 
             c1 = cache.Get(cust1.DatabaseID.ToString());
-            Assert.IsNotNull(c1);
+            Assert.That(c1, Is.Not.Null);
             Customer c2 = cache.Get(cust2.DatabaseID.ToString());
-            Assert.IsNull(c2);
+            Assert.That(c2, Is.Null);
         }
 
         

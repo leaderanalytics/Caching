@@ -38,42 +38,42 @@ namespace LeaderAnalytics.Caching.Tests
             Func<int,string> func2 = z => "20";
 
             Customer result1 = customerCache.Get(x => x.DatabaseID.ToString() == lookupKey.ToString());
-            Assert.AreEqual(1, result1.DatabaseID);
+            Assert.That(result1.DatabaseID, Is.EqualTo(1));
 
             Customer result2 = customerCache.Get(x => "1" == x.DatabaseID.ToString());
-            Assert.AreEqual(1, result2.DatabaseID);
+            Assert.That(result2.DatabaseID, Is.EqualTo(1));
 
             Customer result3 = customerCache.Get(x => x.FederalEIN == "20");
-            Assert.AreEqual("20", result3.FederalEIN);
-            Assert.AreEqual(2, result3.DatabaseID);
+            Assert.That(result3.FederalEIN, Is.EqualTo("20"));
+            Assert.That(result3.DatabaseID, Is.EqualTo(2));
 
             Customer result4 = customerCache.Get(x => "20" == x.FederalEIN);
-            Assert.AreEqual(2, result4.DatabaseID);
+            Assert.That(result4.DatabaseID, Is.EqualTo(2));
 
             string lookupKey2 = "20_200";
             Customer result5 = customerCache.Get(x => x.FederalEIN + "_" + x.SalesForceID == lookupKey2);
-            Assert.AreEqual(2, result5.DatabaseID);
+            Assert.That(result5.DatabaseID, Is.EqualTo(2));
 
             Customer result6 = customerCache.Get(x => lookupKey2 == x.FederalEIN + "_" + x.SalesForceID);
-            Assert.AreEqual(2, result6.DatabaseID);
+            Assert.That(result6.DatabaseID, Is.EqualTo(2));
 
             Customer result7 = customerCache.Get(x => x.DatabaseID.ToString() == func());
-            Assert.AreEqual(3, result7.DatabaseID);
+            Assert.That(result7.DatabaseID, Is.EqualTo(3));
 
             Customer result8 = customerCache.Get(x => func() == x.DatabaseID.ToString());
-            Assert.AreEqual(3, result8.DatabaseID);
+            Assert.That(result8.DatabaseID, Is.EqualTo(3));
 
             Customer result9 = customerCache.Get(x => func2(2) == x.FederalEIN);
-            Assert.AreEqual(2, result9.DatabaseID);
+            Assert.That(result9.DatabaseID, Is.EqualTo(2));
 
             Customer result10 = customerCache.Get(x => x.FederalEIN == func2(2));
-            Assert.AreEqual(2, result10.DatabaseID);
+            Assert.That(result10.DatabaseID, Is.EqualTo(2));
 
             Customer result11 = customerCache.Get(1, "20");
-            Assert.AreEqual(2, result11.DatabaseID);
+            Assert.That(result11.DatabaseID, Is.EqualTo(2));
 
             Customer result12 = customerCache.Get(3, "20");
-            Assert.AreEqual(3, result12.DatabaseID);
+            Assert.That(result12.DatabaseID, Is.EqualTo(3));
 
         }
 
@@ -82,14 +82,14 @@ namespace LeaderAnalytics.Caching.Tests
         public void Lookup_using_nonexistant_identifier_returns_null()
         {
             Customer result1 = customerCache.Get(x => x.DatabaseID.ToString() == "999");
-            Assert.AreEqual(null, result1);
+            Assert.That(result1, Is.Null);
         }
 
         [Test]
         public void Lookup_using_invalid_key_throws()
         {
             InvalidOperationException ex = Assert.Throws<InvalidOperationException>(() => customerCache.Get(x => x.CompanyName == "ABC"));
-            Assert.AreEqual(ex.Message, "An index matching (x.CompanyName == \"ABC\") was not found.");
+            Assert.That("An index matching (x.CompanyName == \"ABC\") was not found.", Is.EqualTo(ex.Message));
         }
 
         [Test]
@@ -98,20 +98,20 @@ namespace LeaderAnalytics.Caching.Tests
             // database ID is unique but other properties are dupes
             Customer cust1 = new Customer { DatabaseID = 9000, FederalEIN = "10", SalesForceID = "100", CompanyName = "ABC" };
             Exception ex = Assert.Throws<Exception>(() => customerCache.Set(cust1));
-            Assert.AreEqual(ex.Message, "Duplicate key error. 4 indexes are defined however only 1 keys were created.");
+            Assert.That("Duplicate key error. 4 indexes are defined however only 1 keys were created.", Is.EqualTo(ex.Message));
         }
 
         [Test]
         public void Adding_full_duplicate_replaces_previous_object()
         {
             Customer oldCust1 = customerCache.Get(x => x.DatabaseID.ToString() == "1");
-            Assert.AreEqual("ABC", oldCust1.CompanyName);
+            Assert.That(oldCust1.CompanyName, Is.EqualTo("ABC"));
 
             Customer newCust1 = new Customer { DatabaseID = 1, FederalEIN = "10", SalesForceID = "100", CompanyName = "XYZ" };
             customerCache.Set(newCust1);
 
             Customer result = customerCache.Get(x => x.DatabaseID.ToString() == "1");
-            Assert.AreEqual("XYZ", result.CompanyName);
+            Assert.That(result.CompanyName, Is.EqualTo("XYZ"));
         }
 
         [Test]
@@ -152,7 +152,7 @@ namespace LeaderAnalytics.Caching.Tests
             });
 
             await Task.WhenAll(t1,t0);
-            Assert.AreEqual(0, customerCache.KeyCount + customerCache.ObjectCount);
+            Assert.That(customerCache.KeyCount + customerCache.ObjectCount, Is.EqualTo(0));
 
         }
     }
