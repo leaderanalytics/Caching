@@ -33,6 +33,8 @@ steps:
 - script: nbgv cloud
   displayName: Set Version
 
+- task: NuGetToolInstaller@1
+
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build'
   inputs:
